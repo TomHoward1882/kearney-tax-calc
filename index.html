@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Kearney Tax">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="theme-color" content="#667eea">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <title>Kearney Property Tax Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            height: 100%;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            min-height: 100%;
+            padding: 20px;
+        }
+        
+        .calculator-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+            margin: 20px auto;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .input-section {
+            margin-bottom: 30px;
+        }
+        
+        label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .value-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 24px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-weight: 600;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background: white;
+        }
+        
+        .value-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .checkbox-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            margin-right: 12px;
+        }
+        
+        .checkbox-label {
+            color: #333;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 0;
+        }
+        
+        .checkbox-description {
+            font-size: 13px;
+            color: #666;
+            margin-top: 8px;
+            margin-left: 36px;
+        }
+        
+        .calc-button {
+            width: 100%;
+            padding: 16px;
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+        }
+        
+        .calc-button:active {
+            opacity: 0.85;
+        }
+        
+        .results {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .total-tax {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .total-tax h2 {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 5px;
+            opacity: 0.9;
+        }
+        
+        .total-tax .amount {
+            font-size: 36px;
+            font-weight: 700;
+        }
+        
+        .senior-savings {
+            background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+        
+        .senior-savings h2 {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 5px;
+            opacity: 0.9;
+        }
+        
+        .senior-savings .amount {
+            font-size: 30px;
+            font-weight: 700;
+        }
+        
+        .senior-savings .detail {
+            font-size: 13px;
+            opacity: 0.85;
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+        
+        .breakdown-title {
+            color: #333;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .tax-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 12px 0;
+            border-bottom: 1px solid #e8e8e8;
+            gap: 10px;
+        }
+        
+        .tax-item:last-child {
+            border-bottom: none;
+        }
+        
+        .tax-item.excluded {
+            opacity: 0.4;
+            text-decoration: line-through;
+        }
+        
+        .tax-subtotal {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 12px 10px;
+            border-bottom: 2px solid #667eea;
+            background-color: #f0f0f0;
+            margin-left: -10px;
+            margin-right: -10px;
+            font-weight: 700;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+        
+        .tax-subtotal.excluded {
+            opacity: 0.4;
+            text-decoration: line-through;
+        }
+        
+        .tax-name {
+            color: #555;
+            font-size: 14px;
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .tax-details {
+            text-align: right;
+            flex-shrink: 0;
+        }
+        
+        .tax-rate {
+            color: #888;
+            font-size: 12px;
+            display: block;
+        }
+        
+        .tax-amount {
+            color: #333;
+            font-weight: 600;
+            font-size: 16px;
+            white-space: nowrap;
+        }
+        
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #1565c0;
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            
+            .calculator-container {
+                padding: 20px;
+                margin-top: 10px;
+                margin-bottom: 10px;
+                border-radius: 15px;
+            }
+            
+            h1 {
+                font-size: 22px;
+            }
+            
+            .value-input {
+                font-size: 20px;
+                padding: 12px;
+            }
+            
+            .total-tax .amount {
+                font-size: 28px;
+            }
+            
+            .senior-savings .amount {
+                font-size: 24px;
+            }
+            
+            .tax-name {
+                font-size: 13px;
+            }
+            
+            .tax-amount {
+                font-size: 14px;
+            }
+            
+            .tax-rate {
+                font-size: 11px;
+            }
+            
+            .results {
+                padding: 15px;
+            }
+            
+            .tax-subtotal {
+                margin-left: -8px;
+                margin-right: -8px;
+                padding-left: 8px;
+                padding-right: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator-container">
+        <h1>Kearney Property Tax Calculator</h1>
+        <p class="subtitle">2024-2025 Tax Year</p>
+        
+        <div class="input-section">
+            <label for="assessedValue2025">2025 Assessed Valuation:</label>
+            <input 
+                type="text" 
+                inputmode="numeric"
+                pattern="[0-9]*"
+                class="value-input"
+                id="assessedValue2025" 
+                placeholder="0" 
+                autocomplete="off"
+                oninput="calculateTaxes()"
+                onkeyup="calculateTaxes()"
+                onchange="calculateTaxes()"
+            >
+        </div>
+        
+        <div class="input-section">
+            <label for="assessedValue2024">2024 Assessed Valuation (Senior Discount):</label>
+            <input 
+                type="text" 
+                inputmode="numeric"
+                pattern="[0-9]*"
+                class="value-input"
+                id="assessedValue2024" 
+                placeholder="Leave blank if not applicable" 
+                autocomplete="off"
+                oninput="calculateTaxes()"
+                onkeyup="calculateTaxes()"
+                onchange="calculateTaxes()"
+            >
+            <div style="font-size: 13px; color: #666; margin-top: 8px;">
+                <strong>Senior Discount:</strong> If you qualify for the senior discount freeze, enter your 2024 assessed value here. Most taxes will be calculated using this frozen amount, while debt service and State (Blind) levies use your 2025 value.
+            </div>
+        </div>
+        
+        <div class="checkbox-section">
+            <div class="checkbox-container">
+                <input 
+                    type="checkbox" 
+                    id="outsideCityLimits"
+                    onchange="calculateTaxes()"
+                >
+                <label for="outsideCityLimits" class="checkbox-label">Outside City Limits</label>
+            </div>
+            <div class="checkbox-description">
+                Check this box if your property is located outside Kearney city limits. This will exclude City of Kearney and City of Kearney Debt levies from the calculation.
+            </div>
+        </div>
+        
+        <button class="calc-button" onclick="calculateTaxes()">Calculate Taxes</button>
+        
+        <div class="results" id="results">
+            <div class="total-tax">
+                <h2>Total Annual Property Tax</h2>
+                <div class="amount" id="totalTax">$0.00</div>
+            </div>
+            
+            <div class="senior-savings" id="seniorSavings">
+                <h2>Senior Freeze Savings</h2>
+                <div class="amount" id="savingsAmount">$0.00</div>
+                <div class="detail" id="savingsDetail"></div>
+            </div>
+            
+            <div class="breakdown-title">Tax Breakdown</div>
+            <div id="breakdown"></div>
+            
+            <div class="info-box">
+                <strong>How it works:</strong> Tax is calculated as: (Assessed Value / 100) x Rate per $100
+                <br><br>
+                <strong>Senior Discount Freeze:</strong> If you qualify and enter a 2024 assessed value:
+                <ul style="margin: 10px 0; padding-left: 20px;">
+                    <li>If your 2025 value <strong>increased</strong> from 2024: Eligible taxes are frozen at 2024 levels (both rate and assessment)</li>
+                    <li>If your 2025 value <strong>decreased</strong> from 2024: You automatically get the lower 2025 value (no benefit to freezing at a higher 2024 amount)</li>
+                    <li>Debt service levies and State (Blind) are never frozen and always use current 2025 rates and values</li>
+                </ul>
+                <strong>Important:</strong> This calculator provides estimates based on official Kearney city limits tax levy rates. Your actual Clay County tax bill may differ due to special exemptions, tax credits, different jurisdictions, or additional assessments. Always refer to your official tax statement for exact amounts.
+            </div>
+        </div>
+    </div>
+
+    <script>
+    var taxRates = [
+        { name: "County General", rate2025: 0.0179, rate2024: 0.0200, seniorFrozen: true, cityLevy: false },
+        { name: "County Road & Bridge", rate2025: 0.0617, rate2024: 0.0658, seniorFrozen: true, cityLevy: false },
+        { name: "County Senior Services", rate2025: 0.0378, rate2024: 0.0403, seniorFrozen: true, cityLevy: false },
+        { name: "Handicap DDRB", rate2025: 0.0909, rate2024: 0.0970, seniorFrozen: true, cityLevy: false },
+        { name: "Health", rate2025: 0.0758, rate2024: 0.0809, seniorFrozen: true, cityLevy: false },
+        { name: "City of Kearney", rate2025: 0.4521, rate2024: 0.4764, seniorFrozen: true, cityLevy: true },
+        { name: "City of Kearney Debt", rate2025: 0.0500, rate2024: 0.0500, seniorFrozen: false, cityLevy: true },
+        { name: "Fire District", rate2025: 0.7860, rate2024: 0.8386, seniorFrozen: true, cityLevy: false },
+        { name: "Fire District Debt", rate2025: 0.1355, rate2024: 0.1355, seniorFrozen: false, cityLevy: false },
+        { name: "School District", rate2025: 3.2277, rate2024: 3.4324, seniorFrozen: true, cityLevy: false },
+        { name: "School District Debt", rate2025: 1.1902, rate2024: 1.1902, seniorFrozen: false, cityLevy: false },
+        { name: "Library", rate2025: 0.3119, rate2024: 0.3152, seniorFrozen: true, cityLevy: false },
+        { name: "Mental Health", rate2025: 0.0758, rate2024: 0.0809, seniorFrozen: true, cityLevy: false },
+        { name: "State (Blind)", rate2025: 0.0300, rate2024: 0.0300, seniorFrozen: false, cityLevy: false }
+    ];
+
+    function formatCurrency(value, decimals) {
+        if (typeof decimals === 'undefined') decimals = 2;
+        var parts = value.toFixed(decimals).split('.');
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        return '$' + parts.join('.');
+    }
+
+    function formatRate(rate) {
+        return rate.toFixed(4);
+    }
+
+    function getNumericValue(id) {
+        var el = document.getElementById(id);
+        if (!el) return 0;
+        var val = el.value.replace(/[^0-9.]/g, '');
+        var num = parseFloat(val);
+        return isNaN(num) ? 0 : num;
+    }
+
+    function calculateTaxes() {
+        var assessedValue2025 = getNumericValue('assessedValue2025');
+        var assessedValue2024 = getNumericValue('assessedValue2024');
+        var outsideCityLimits = document.getElementById('outsideCityLimits').checked;
+        var resultsDiv = document.getElementById('results');
+        var totalTaxDiv = document.getElementById('totalTax');
+        var breakdownDiv = document.getElementById('breakdown');
+        var seniorSavingsDiv = document.getElementById('seniorSavings');
+        var savingsAmountDiv = document.getElementById('savingsAmount');
+        var savingsDetailDiv = document.getElementById('savingsDetail');
+        
+        if (assessedValue2025 <= 0) {
+            resultsDiv.style.display = 'none';
+            return;
+        }
+        
+        resultsDiv.style.display = 'block';
+        
+        var seniorDiscount = assessedValue2024 > 0;
+        var use2025ForFrozen = seniorDiscount && (assessedValue2025 < assessedValue2024);
+        
+        var totalTax = 0;
+        var totalTaxNoFreeze = 0;
+        var breakdownHTML = '';
+        var taxCalculations = {};
+        
+        for (var i = 0; i < taxRates.length; i++) {
+            var tax = taxRates[i];
+            var isExcluded = outsideCityLimits && tax.cityLevy;
+            var assessedValueToUse;
+            var rateToUse;
+            var valueBasis = '';
+            
+            if (seniorDiscount && tax.seniorFrozen) {
+                if (use2025ForFrozen) {
+                    assessedValueToUse = assessedValue2025;
+                    rateToUse = tax.rate2025;
+                    valueBasis = ' (value decreased)';
+                } else {
+                    assessedValueToUse = assessedValue2024;
+                    rateToUse = tax.rate2024;
+                    valueBasis = ' (frozen at 2024)';
+                }
+            } else {
+                assessedValueToUse = assessedValue2025;
+                rateToUse = tax.rate2025;
+                if (seniorDiscount && !tax.seniorFrozen) {
+                    valueBasis = ' (2025 value)';
+                }
+            }
+            
+            var taxAmount = (assessedValueToUse / 100) * rateToUse;
+            var taxAmountNoFreeze = (assessedValue2025 / 100) * tax.rate2025;
+            
+            taxCalculations[tax.name] = {
+                amount: taxAmount,
+                amountNoFreeze: taxAmountNoFreeze,
+                rate: rateToUse,
+                valueBasis: valueBasis,
+                isExcluded: isExcluded
+            };
+            
+            if (!isExcluded) {
+                totalTax += taxAmount;
+                totalTaxNoFreeze += taxAmountNoFreeze;
+            }
+        }
+        
+        // Senior Savings
+        if (seniorDiscount) {
+            var savings = totalTaxNoFreeze - totalTax;
+            seniorSavingsDiv.style.display = 'block';
+            if (savings > 0) {
+                savingsAmountDiv.textContent = formatCurrency(savings);
+                savingsDetailDiv.innerHTML = 'You save ' + formatCurrency(savings) + ' by freezing at 2024 levels vs. paying full 2025 rates.<br>Without freeze: ' + formatCurrency(totalTaxNoFreeze) + '  |  With freeze: ' + formatCurrency(totalTax);
+            } else {
+                savingsAmountDiv.textContent = '$0.00';
+                savingsDetailDiv.textContent = 'Your 2025 assessed value is lower than 2024, so you already pay less at 2025 rates. No freeze benefit applies.';
+            }
+        } else {
+            seniorSavingsDiv.style.display = 'none';
+        }
+        
+        // Build breakdown
+        var countyTotal = taxCalculations['County General'].amount + 
+            taxCalculations['County Road & Bridge'].amount + 
+            taxCalculations['County Senior Services'].amount;
+        breakdownHTML += taxLine('County General', taxCalculations['County General'], false);
+        breakdownHTML += taxLine('County Road & Bridge', taxCalculations['County Road & Bridge'], false);
+        breakdownHTML += taxLine('County Senior Services', taxCalculations['County Senior Services'], false);
+        breakdownHTML += taxLine('County Services Subtotal', { amount: countyTotal, rate: 0, valueBasis: '', isExcluded: false }, true);
+        
+        breakdownHTML += taxLine('Handicap DDRB', taxCalculations['Handicap DDRB'], false);
+        breakdownHTML += taxLine('Health', taxCalculations['Health'], false);
+        
+        var cityTotal = taxCalculations['City of Kearney'].amount + taxCalculations['City of Kearney Debt'].amount;
+        var cityExcluded = taxCalculations['City of Kearney'].isExcluded;
+        breakdownHTML += taxLine('City of Kearney', taxCalculations['City of Kearney'], false);
+        breakdownHTML += taxLine('City of Kearney Debt', taxCalculations['City of Kearney Debt'], false);
+        breakdownHTML += taxLine('City of Kearney Subtotal', { amount: cityTotal, rate: 0, valueBasis: '', isExcluded: cityExcluded }, true);
+        
+        var fireTotal = taxCalculations['Fire District'].amount + taxCalculations['Fire District Debt'].amount;
+        breakdownHTML += taxLine('Fire District', taxCalculations['Fire District'], false);
+        breakdownHTML += taxLine('Fire District Debt', taxCalculations['Fire District Debt'], false);
+        breakdownHTML += taxLine('Kearney Fire District #2 Subtotal', { amount: fireTotal, rate: 0, valueBasis: '', isExcluded: false }, true);
+        
+        var schoolTotal = taxCalculations['School District'].amount + taxCalculations['School District Debt'].amount;
+        breakdownHTML += taxLine('School District', taxCalculations['School District'], false);
+        breakdownHTML += taxLine('School District Debt', taxCalculations['School District Debt'], false);
+        breakdownHTML += taxLine('Kearney School District Subtotal', { amount: schoolTotal, rate: 0, valueBasis: '', isExcluded: false }, true);
+        
+        breakdownHTML += taxLine('Library', taxCalculations['Library'], false);
+        breakdownHTML += taxLine('Mental Health', taxCalculations['Mental Health'], false);
+        breakdownHTML += taxLine('State (Blind)', taxCalculations['State (Blind)'], false);
+        
+        totalTaxDiv.textContent = formatCurrency(totalTax);
+        breakdownDiv.innerHTML = breakdownHTML;
+    }
+
+    function taxLine(name, calc, isSubtotal) {
+        var excludedClass = calc.isExcluded ? ' excluded' : '';
+        var itemClass = isSubtotal ? 'tax-subtotal' : 'tax-item';
+        var nameText = isSubtotal ? name : '&nbsp;&nbsp;' + name;
+        var html = '';
+        html += '<div class="' + itemClass + excludedClass + '">';
+        html += '<div class="tax-name">' + nameText + calc.valueBasis + (calc.isExcluded ? ' (excluded)' : '') + '</div>';
+        html += '<div class="tax-details">';
+        if (!isSubtotal) {
+            html += '<span class="tax-rate">Rate: ' + formatRate(calc.rate) + ' per $100</span>';
+        }
+        html += '<span class="tax-amount">' + formatCurrency(calc.amount, 4) + '</span>';
+        html += '</div></div>';
+        return html;
+    }
+
+    // Register service worker for offline PWA support
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js').catch(function() {
+            // Service worker not available - that's fine, app still works
+        });
+    }
+    </script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-var CACHE_NAME = 'kearney-tax-v2';
+var CACHE_NAME = 'kearney-tax-v3';
 var urlsToCache = [
     './',
     './index.html',
@@ -6,6 +6,7 @@ var urlsToCache = [
 ];
 
 self.addEventListener('install', function(event) {
+    self.skipWaiting();
     event.waitUntil(
         caches.open(CACHE_NAME).then(function(cache) {
             return cache.addAll(urlsToCache);
@@ -13,10 +14,27 @@ self.addEventListener('install', function(event) {
     );
 });
 
+// Remove caches from older versions so they can't serve out-of-date rates
+self.addEventListener('activate', function(event) {
+    event.waitUntil(
+        caches.keys().then(function(names) {
+            return Promise.all(names.map(function(name) {
+                if (name !== CACHE_NAME) return caches.delete(name);
+            }));
+        }).then(function() { return self.clients.claim(); })
+    );
+});
+
+// Network first, so updates show right away; fall back to the cache when offline
 self.addEventListener('fetch', function(event) {
+    if (event.request.method !== 'GET') return;
     event.respondWith(
-        caches.match(event.request).then(function(response) {
-            return response || fetch(event.request);
+        fetch(event.request).then(function(response) {
+            var copy = response.clone();
+            caches.open(CACHE_NAME).then(function(cache) { cache.put(event.request, copy); });
+            return response;
+        }).catch(function() {
+            return caches.match(event.request);
         })
     );
 });

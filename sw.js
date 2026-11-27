@@ -1,4 +1,4 @@
-var CACHE_NAME = 'kearney-tax-v1';
+var CACHE_NAME = 'kearney-tax-v2';
 var urlsToCache = [
     './',
     './index.html',

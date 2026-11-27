@@ -336,16 +336,16 @@
 <body>
     <div class="calculator-container">
         <h1>Kearney Property Tax Calculator</h1>
-        <p class="subtitle">2024-2025 Tax Year</p>
+        <p class="subtitle">2025-2026 Tax Year</p>
         
         <div class="input-section">
-            <label for="assessedValue2025">2025 Assessed Valuation:</label>
+            <label for="assessedValue2026">2026 Assessed Valuation:</label>
             <input 
                 type="text" 
                 inputmode="numeric"
                 pattern="[0-9]*"
                 class="value-input"
-                id="assessedValue2025" 
+                id="assessedValue2026" 
                 placeholder="0" 
                 autocomplete="off"
                 oninput="calculateTaxes()"
@@ -355,13 +355,13 @@
         </div>
         
         <div class="input-section">
-            <label for="assessedValue2024">2024 Assessed Valuation (Senior Discount):</label>
+            <label for="assessedValue2025">2025 Assessed Valuation (Senior Discount):</label>
             <input 
                 type="text" 
                 inputmode="numeric"
                 pattern="[0-9]*"
                 class="value-input"
-                id="assessedValue2024" 
+                id="assessedValue2025" 
                 placeholder="Leave blank if not applicable" 
                 autocomplete="off"
                 oninput="calculateTaxes()"
@@ -369,7 +369,7 @@
                 onchange="calculateTaxes()"
             >
             <div style="font-size: 13px; color: #666; margin-top: 8px;">
-                <strong>Senior Discount:</strong> If you qualify for the senior discount freeze, enter your 2024 assessed value here. Most taxes will be calculated using this frozen amount, while debt service and State (Blind) levies use your 2025 value.
+                <strong>Senior Discount:</strong> If you qualify for the senior discount freeze, enter your 2025 assessed value here. Most taxes will be calculated using this frozen amount, while debt service and State (Blind) levies use your 2026 value.
             </div>
         </div>
         
@@ -407,11 +407,11 @@
             <div class="info-box">
                 <strong>How it works:</strong> Tax is calculated as: (Assessed Value / 100) x Rate per $100
                 <br><br>
-                <strong>Senior Discount Freeze:</strong> If you qualify and enter a 2024 assessed value:
+                <strong>Senior Discount Freeze:</strong> If you qualify and enter a 2025 assessed value:
                 <ul style="margin: 10px 0; padding-left: 20px;">
-                    <li>If your 2025 value <strong>increased</strong> from 2024: Eligible taxes are frozen at 2024 levels (both rate and assessment)</li>
-                    <li>If your 2025 value <strong>decreased</strong> from 2024: You automatically get the lower 2025 value (no benefit to freezing at a higher 2024 amount)</li>
-                    <li>Debt service levies and State (Blind) are never frozen and always use current 2025 rates and values</li>
+                    <li>If your 2026 value <strong>increased</strong> from 2025: Eligible taxes are frozen at 2025 levels (both rate and assessment)</li>
+                    <li>If your 2026 value <strong>decreased</strong> from 2025: You automatically get the lower 2026 value (no benefit to freezing at a higher 2025 amount)</li>
+                    <li>Debt service levies and State (Blind) are never frozen and always use current 2026 rates and values</li>
                 </ul>
                 <strong>Important:</strong> This calculator provides estimates based on official Kearney city limits tax levy rates. Your actual Clay County tax bill may differ due to special exemptions, tax credits, different jurisdictions, or additional assessments. Always refer to your official tax statement for exact amounts.
             </div>
@@ -420,20 +420,20 @@
 
     <script>
     var taxRates = [
-        { name: "County General", rate2025: 0.0179, rate2024: 0.0200, seniorFrozen: true, cityLevy: false },
-        { name: "County Road & Bridge", rate2025: 0.0617, rate2024: 0.0658, seniorFrozen: true, cityLevy: false },
-        { name: "County Senior Services", rate2025: 0.0378, rate2024: 0.0403, seniorFrozen: true, cityLevy: false },
-        { name: "Handicap DDRB", rate2025: 0.0909, rate2024: 0.0970, seniorFrozen: true, cityLevy: false },
-        { name: "Health", rate2025: 0.0758, rate2024: 0.0809, seniorFrozen: true, cityLevy: false },
-        { name: "City of Kearney", rate2025: 0.4521, rate2024: 0.4764, seniorFrozen: true, cityLevy: true },
-        { name: "City of Kearney Debt", rate2025: 0.0500, rate2024: 0.0500, seniorFrozen: false, cityLevy: true },
-        { name: "Fire District", rate2025: 0.7860, rate2024: 0.8386, seniorFrozen: true, cityLevy: false },
-        { name: "Fire District Debt", rate2025: 0.1355, rate2024: 0.1355, seniorFrozen: false, cityLevy: false },
-        { name: "School District", rate2025: 3.2277, rate2024: 3.4324, seniorFrozen: true, cityLevy: false },
-        { name: "School District Debt", rate2025: 1.1902, rate2024: 1.1902, seniorFrozen: false, cityLevy: false },
-        { name: "Library", rate2025: 0.3119, rate2024: 0.3152, seniorFrozen: true, cityLevy: false },
-        { name: "Mental Health", rate2025: 0.0758, rate2024: 0.0809, seniorFrozen: true, cityLevy: false },
-        { name: "State (Blind)", rate2025: 0.0300, rate2024: 0.0300, seniorFrozen: false, cityLevy: false }
+        { name: "County General", rate2026: 0.0150, rate2025: 0.0179, seniorFrozen: true, cityLevy: false },
+        { name: "County Road & Bridge", rate2026: 0.0617, rate2025: 0.0617, seniorFrozen: true, cityLevy: false },
+        { name: "County Senior Services", rate2026: 0.0378, rate2025: 0.0378, seniorFrozen: true, cityLevy: false },
+        { name: "Handicap DDRB", rate2026: 0.0909, rate2025: 0.0909, seniorFrozen: true, cityLevy: false },
+        { name: "Health", rate2026: 0.0758, rate2025: 0.0758, seniorFrozen: true, cityLevy: false },
+        { name: "City of Kearney", rate2026: 0.4521, rate2025: 0.4521, seniorFrozen: true, cityLevy: true },
+        { name: "City of Kearney Debt", rate2026: 0.0500, rate2025: 0.0500, seniorFrozen: false, cityLevy: true },
+        { name: "Fire District", rate2026: 0.7860, rate2025: 0.7860, seniorFrozen: true, cityLevy: false },
+        { name: "Fire District Debt", rate2026: 0.1355, rate2025: 0.1355, seniorFrozen: false, cityLevy: false },
+        { name: "School District", rate2026: 3.2320, rate2025: 3.2277, seniorFrozen: true, cityLevy: false },
+        { name: "School District Debt", rate2026: 1.1902, rate2025: 1.1902, seniorFrozen: false, cityLevy: false },
+        { name: "Library", rate2026: 0.3170, rate2025: 0.3119, seniorFrozen: true, cityLevy: false },
+        { name: "Mental Health", rate2026: 0.0758, rate2025: 0.0758, seniorFrozen: true, cityLevy: false },
+        { name: "State (Blind)", rate2026: 0.0300, rate2025: 0.0300, seniorFrozen: false, cityLevy: false }
     ];
 
     function formatCurrency(value, decimals) {
@@ -456,8 +456,8 @@
     }
 
     function calculateTaxes() {
+        var assessedValue2026 = getNumericValue('assessedValue2026');
         var assessedValue2025 = getNumericValue('assessedValue2025');
-        var assessedValue2024 = getNumericValue('assessedValue2024');
         var outsideCityLimits = document.getElementById('outsideCityLimits').checked;
         var resultsDiv = document.getElementById('results');
         var totalTaxDiv = document.getElementById('totalTax');
@@ -466,15 +466,15 @@
         var savingsAmountDiv = document.getElementById('savingsAmount');
         var savingsDetailDiv = document.getElementById('savingsDetail');
         
-        if (assessedValue2025 <= 0) {
+        if (assessedValue2026 <= 0) {
             resultsDiv.style.display = 'none';
             return;
         }
         
         resultsDiv.style.display = 'block';
         
-        var seniorDiscount = assessedValue2024 > 0;
-        var use2025ForFrozen = seniorDiscount && (assessedValue2025 < assessedValue2024);
+        var seniorDiscount = assessedValue2025 > 0;
+        var use2026ForFrozen = seniorDiscount && (assessedValue2026 < assessedValue2025);
         
         var totalTax = 0;
         var totalTaxNoFreeze = 0;
@@ -489,25 +489,25 @@
             var valueBasis = '';
             
             if (seniorDiscount && tax.seniorFrozen) {
-                if (use2025ForFrozen) {
-                    assessedValueToUse = assessedValue2025;
-                    rateToUse = tax.rate2025;
+                if (use2026ForFrozen) {
+                    assessedValueToUse = assessedValue2026;
+                    rateToUse = tax.rate2026;
                     valueBasis = ' (value decreased)';
                 } else {
-                    assessedValueToUse = assessedValue2024;
-                    rateToUse = tax.rate2024;
-                    valueBasis = ' (frozen at 2024)';
+                    assessedValueToUse = assessedValue2025;
+                    rateToUse = tax.rate2025;
+                    valueBasis = ' (frozen at 2025)';
                 }
             } else {
-                assessedValueToUse = assessedValue2025;
-                rateToUse = tax.rate2025;
+                assessedValueToUse = assessedValue2026;
+                rateToUse = tax.rate2026;
                 if (seniorDiscount && !tax.seniorFrozen) {
-                    valueBasis = ' (2025 value)';
+                    valueBasis = ' (2026 value)';
                 }
             }
             
             var taxAmount = (assessedValueToUse / 100) * rateToUse;
-            var taxAmountNoFreeze = (assessedValue2025 / 100) * tax.rate2025;
+            var taxAmountNoFreeze = (assessedValue2026 / 100) * tax.rate2026;
             
             taxCalculations[tax.name] = {
                 amount: taxAmount,
@@ -529,10 +529,10 @@
             seniorSavingsDiv.style.display = 'block';
             if (savings > 0) {
                 savingsAmountDiv.textContent = formatCurrency(savings);
-                savingsDetailDiv.innerHTML = 'You save ' + formatCurrency(savings) + ' by freezing at 2024 levels vs. paying full 2025 rates.<br>Without freeze: ' + formatCurrency(totalTaxNoFreeze) + '  |  With freeze: ' + formatCurrency(totalTax);
+                savingsDetailDiv.innerHTML = 'You save ' + formatCurrency(savings) + ' by freezing at 2025 levels vs. paying full 2026 rates.<br>Without freeze: ' + formatCurrency(totalTaxNoFreeze) + '  |  With freeze: ' + formatCurrency(totalTax);
             } else {
                 savingsAmountDiv.textContent = '$0.00';
-                savingsDetailDiv.textContent = 'Your 2025 assessed value is lower than 2024, so you already pay less at 2025 rates. No freeze benefit applies.';
+                savingsDetailDiv.textContent = 'Your 2026 assessed value is lower than 2025, so you already pay less at 2026 rates. No freeze benefit applies.';
             }
         } else {
             seniorSavingsDiv.style.display = 'none';
